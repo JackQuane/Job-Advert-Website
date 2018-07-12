@@ -1,0 +1,43 @@
+$(document).ready(
+	(function() {
+		var getNode = function(s) {
+			return document.querySelector(s);
+		},
+		
+		//get required nodes
+		userList = getNode('.user-name');
+		
+		try{
+			var socket = io.connect('http://danu7.it.nuigalway.ie:8663');
+		}catch(e)
+		{
+			//Set status to warn user
+		}
+		
+		
+		
+		
+		if(socket !== undefined){
+			//console.log('socket is not undefined and is OK');
+			
+			//Listen For Output (Messages from other users)
+			socket.on('outputUsers', function(data){
+				if(data.length){
+					//Loop through results
+					userList.innerHTML = " ";
+					for(var x =0; x < data.length; x=x+1)
+					{
+						var userNameDiv = document.createElement('div');
+						userNameDiv.setAttribute('class', 'chat-message');
+						userNameDiv.textContent = data[x].user_name;
+						
+						//Append
+						//console.log(userNameDiv);
+						userList.appendChild(userNameDiv);
+
+					}
+				}
+			});	
+		}
+	})
+);
